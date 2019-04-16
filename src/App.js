@@ -1,28 +1,84 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { View, Text, Animated, StyleSheet } from "react-native";
 
-class App extends Component {
+const logo = require("./assets/react-logo.png");
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.imageAnimation = new Animated.Value(0);
+  }
+
+  componentDidMount() {
+    Animated.loop(
+      Animated.timing(this.imageAnimation, {
+        toValue: 1,
+        duration: 1005
+      })
+    ).start();
+  }
+
   render() {
+    const rotationStyle = {
+      transform: [
+        {
+          rotate: this.imageAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: ["0deg", "360deg"]
+          })
+        }
+      ]
+    };
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <View style={styles.app}>
+        <View style={styles.appHeader}>
+          <Animated.Image
+            style={[styles.headerImage, rotationStyle]}
+            resizeMode={"contain"}
+            source={logo}
+          />
+          <Text style={styles.appTitle}>Welcome to React Native Web️</Text>
+          <Text style={styles.appSubtitle}>Vanilla Edition</Text>
+        </View>
+        <View style={{ alignItems: "center", flex: 3 }}>
+          <Text style={styles.appIntro}>
+            To get started, edit src/App.js and save to reload.
+          </Text>
+        </View>
+      </View>
     );
   }
 }
 
-export default App;
+const styles = StyleSheet.create({
+  app: {
+    flex: 1
+  },
+  appHeader: {
+    flex: 1,
+    backgroundColor: "#222",
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  headerImage: {
+    width: 200,
+    height: 200,
+    flex: 3
+  },
+  appTitle: {
+    flex: 1,
+    fontSize: 16,
+    color: "white"
+  },
+  appSubtitle: {
+    color: "white"
+  },
+  appIntro: {
+    flex: 3,
+    fontSize: 30,
+    textAlign: "center"
+  }
+});
