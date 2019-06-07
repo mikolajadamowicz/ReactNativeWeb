@@ -1,84 +1,38 @@
 import React from "react";
-import { View, Text, Animated, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { Router, Link, Route } from "./config/routes";
+import Entry from "./components/Entry";
+import About from "./components/About";
 
-const logo = require("./assets/react-logo.png");
-
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.imageAnimation = new Animated.Value(0);
-  }
-
-  componentDidMount() {
-    Animated.loop(
-      Animated.timing(this.imageAnimation, {
-        toValue: 1,
-        duration: 1005
-      })
-    ).start();
-  }
-
-  render() {
-    const rotationStyle = {
-      transform: [
-        {
-          rotate: this.imageAnimation.interpolate({
-            inputRange: [0, 1],
-            outputRange: ["0deg", "360deg"]
-          })
-        }
-      ]
-    };
-
-    return (
-      <View style={styles.app}>
-        <View style={styles.appHeader}>
-          <Animated.Image
-            style={[styles.headerImage, rotationStyle]}
-            resizeMode={"contain"}
-            source={logo}
-          />
-          <Text style={styles.appTitle}>Welcome to React Native Web️</Text>
-          <Text style={styles.appSubtitle}>Vanilla Edition</Text>
-        </View>
-        <View style={{ alignItems: "center", flex: 3 }}>
-          <Text style={styles.appIntro}>
-            To get started, edit src/App.js and save to reload.
-          </Text>
-        </View>
+const App = () => (
+  <Router>
+    <View style={styles.app}>
+      <View style={styles.header}>
+        <Link to="/">
+          <Text style={styles.navText}>Home</Text>
+        </Link>
+        <Link to="/about">
+          <Text style={styles.navText}>About</Text>
+        </Link>
       </View>
-    );
-  }
-}
+
+      <Route exact path="/" component={Entry} />
+      <Route exact path="/about" component={About} />
+    </View>
+  </Router>
+);
 
 const styles = StyleSheet.create({
-  app: {
-    flex: 1
-  },
-  appHeader: {
-    flex: 1,
-    backgroundColor: "#222",
-    padding: 20,
+  app: { flex: 1 },
+  header: {
+    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    backgroundColor: "#192f6a",
+    paddingTop: 50,
+    paddingBottom: 20
   },
-  headerImage: {
-    width: 200,
-    height: 200,
-    flex: 3
-  },
-  appTitle: {
-    flex: 1,
-    fontSize: 16,
-    color: "white"
-  },
-  appSubtitle: {
-    color: "white"
-  },
-  appIntro: {
-    flex: 3,
-    fontSize: 30,
-    textAlign: "center"
-  }
+  navText: { color: "#ffff", marginHorizontal: 10 }
 });
+
+export default App;
